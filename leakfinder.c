@@ -87,7 +87,7 @@ void my_free(char *func, void *p) {
 static int hash(char *str) {
 	int val = 0;
 	while(*str) {
-		val = *str * *str;
+		val += *str * *str;
 		str++;
 	}
 	return val % BUCKET_SIZE;
