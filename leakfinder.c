@@ -12,10 +12,23 @@ typedef struct _ENTRY {
 	int count;
 } T_ENTRY;
 
-
 T_ENTRY buckets[BUCKET_SIZE];
 
-static int hash(char *str);
+static int hash(const char *key) {
+	int val = 0;
+    int offset = 1;
+    char *pKey = (char *)key;
+	while(*pKey) {
+		val ^= (*pKey * *pKey);
+        val <<= offset;
+        offset++;
+		pKey++;
+	}
+#if DEBUG
+    fprintf(stdout, "[DEBUG] key:[%s] val:[%d]\n", key, val);
+#endif
+	return val % BUCKET_SIZE;
+}
 
 int check_collision(int len, char **keys) {
 	int i = 0;
@@ -82,13 +95,4 @@ void my_free(char *func, void *p) {
 	}
 
 	free(p);
-}
-
-static int hash(char *str) {
-	int val = 0;
-	while(*str) {
-		val += *str * *str;
-		str++;
-	}
-	return val % BUCKET_SIZE;
 }
